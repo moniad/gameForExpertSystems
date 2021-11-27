@@ -1,6 +1,6 @@
 =================== ruchy przeciwnika ===============
 #TODO
-zrob_krok(przeciwnik, kierunek) :- TODO. jeśli nowa pozycja nie będzie poza planszą # przejscie o jedno pole w lewo, prawo, góra, dół
+zrob_krok(przeciwnik, kierunek) :- pole_miesci_sie_w_planszy(...) # przejscie o jedno pole w lewo, prawo, góra, dół
 # gdy jesteśmy na skraju planszy i kolejny ruch spowoduje wyjście poza planszę - losujemy inny kierunek ruchu i zaczynamy obchód w nową stronę
 
 popatrz_w_strone(przeciwnik, kierunek) :- obrot_w_obchodzie(przeciwnik, 3), popatrz_w_strone(gracz)
