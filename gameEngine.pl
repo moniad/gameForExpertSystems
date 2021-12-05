@@ -13,9 +13,9 @@
 
 %# gdy przeciwnik widzi gracza, gracz przegrywa
 dies(player) :- distance(player, opponent, DIST), DIST =< 5, not(crawls(player)).
-ginie(gracz) :- in_opponent_fov(player).
+dies(player) :- in_opponent_fov(player).
 
-wygrywa(gracz) :- calm(opponent), distance(player, opponent, DIST), DIST = 1, crawls(player).
+wins(player) :- calm(opponent), distance(player, opponent, DIST), DIST = 1, crawls(player).
 
 %----------------- pytania ------------------
 %- w Prologu jest domyślnie backward chaining - czyli apka ma działać tak, że odpytujemy z poziomu aplikacji
