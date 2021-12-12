@@ -1,60 +1,62 @@
 %=================== ruchy opponenta ===============
 
+% TODO: zintegrować z zaczyna_obchod i patrzeniem w stronę gracza!!!
 popatrz_w_strone(gracz) :- zaniepokojony(opponent).
+zaczyna_obchod(opponent) :- calm(opponent), players_movement_counter(2), opponents_movement_counter(0).
 
 :- dynamic opponent_patrzy_w_prawo/0, opponent_patrzy_w_lewo/0, opponent_patrzy_w_gore/0, opponent_patrzy_w_dol/0.
 
-% TODO: workaround until opponent's movement is fully integrated with player's movement
-:- retract(players_movement_counter(0)).
-:- asserta(players_movement_counter(2)).
-
+% przeciwnik patrzy w prawo na początku, bo tak xd
 :- asserta(opponent_patrzy_w_prawo).
 :- asserta(opponents_movement_counter(0)).
 
 % #################### OBCHÓD ####################
-zaczyna_obchod(opponent) :- calm(opponent), players_movement_counter(2), opponents_movement_counter(0).
-% TODO: pytac o zaczyna_obchod - ok??
+
+move_opponent :- try_to_move_opponent_one_field_to_the_right.
+move_opponent :- try_to_move_opponent_one_field_to_the_left.
+move_opponent :- try_to_move_opponent_one_field_up.
+move_opponent :- try_to_move_opponent_one_field_down.
 
 % obchod zaczyna sie od 3 krokow w prawo, a potem w gore
-zrob_krok_w_prawo :- opponents_movement_counter(0), players_movement_counter(2), move_opponent_right, update_movement_counters(0).
-zrob_krok_w_prawo :- opponents_movement_counter(1), players_movement_counter(2), move_opponent_right, update_movement_counters(1).
-zrob_krok_w_prawo :- opponents_movement_counter(2), players_movement_counter(2), move_opponent_right, update_movement_counters(2).
-zrob_krok_w_prawo :- opponents_movement_counter(6), players_movement_counter(2), move_opponent_right, update_movement_counters(6).
-zrob_krok_w_prawo :- opponents_movement_counter(7), players_movement_counter(2), move_opponent_right, update_movement_counters(7).
-zrob_krok_w_prawo :- opponents_movement_counter(8), players_movement_counter(2), move_opponent_right, update_movement_counters(8).
-zrob_krok_w_prawo :- opponents_movement_counter(12), players_movement_counter(2), move_opponent_right, update_movement_counters(12).
-zrob_krok_w_prawo :- opponents_movement_counter(13), players_movement_counter(2), move_opponent_right, update_movement_counters(13).
-zrob_krok_w_prawo :- opponents_movement_counter(14), players_movement_counter(2), move_opponent_right, update_movement_counters(14).
+try_to_move_opponent_one_field_to_the_right :- opponents_movement_counter(0), players_movement_counter(2), move_opponent_right, update_movement_counters(0).
+try_to_move_opponent_one_field_to_the_right :- opponents_movement_counter(1), players_movement_counter(2), move_opponent_right, update_movement_counters(1).
+try_to_move_opponent_one_field_to_the_right :- opponents_movement_counter(2), players_movement_counter(2), move_opponent_right, update_movement_counters(2).
+try_to_move_opponent_one_field_to_the_right :- opponents_movement_counter(6), players_movement_counter(2), move_opponent_right, update_movement_counters(6).
+try_to_move_opponent_one_field_to_the_right :- opponents_movement_counter(7), players_movement_counter(2), move_opponent_right, update_movement_counters(7).
+try_to_move_opponent_one_field_to_the_right :- opponents_movement_counter(8), players_movement_counter(2), move_opponent_right, update_movement_counters(8).
+try_to_move_opponent_one_field_to_the_right :- opponents_movement_counter(12), players_movement_counter(2), move_opponent_right, update_movement_counters(12).
+try_to_move_opponent_one_field_to_the_right :- opponents_movement_counter(13), players_movement_counter(2), move_opponent_right, update_movement_counters(13).
+try_to_move_opponent_one_field_to_the_right :- opponents_movement_counter(14), players_movement_counter(2), move_opponent_right, update_movement_counters(14).
 
-zrob_krok_w_gore :- opponents_movement_counter(3), players_movement_counter(2), move_opponent_up, update_movement_counters(3).
-zrob_krok_w_gore :- opponents_movement_counter(4), players_movement_counter(2), move_opponent_up, update_movement_counters(4).
-zrob_krok_w_gore :- opponents_movement_counter(5), players_movement_counter(2), move_opponent_up, update_movement_counters(5).
-zrob_krok_w_gore :- opponents_movement_counter(27), players_movement_counter(2), move_opponent_up, update_movement_counters(27).
-zrob_krok_w_gore :- opponents_movement_counter(28), players_movement_counter(2), move_opponent_up, update_movement_counters(28).
-zrob_krok_w_gore :- opponents_movement_counter(29), players_movement_counter(2), move_opponent_up, update_movement_counters(29).
-zrob_krok_w_gore :- opponents_movement_counter(33), players_movement_counter(2), move_opponent_up, update_movement_counters(33).
-zrob_krok_w_gore :- opponents_movement_counter(34), players_movement_counter(2), move_opponent_up, update_movement_counters(34).
-zrob_krok_w_gore :- opponents_movement_counter(35), players_movement_counter(2), move_opponent_up, update_movement_counters(35).
+try_to_move_opponent_one_field_up :- opponents_movement_counter(3), players_movement_counter(2), move_opponent_up, update_movement_counters(3).
+try_to_move_opponent_one_field_up :- opponents_movement_counter(4), players_movement_counter(2), move_opponent_up, update_movement_counters(4).
+try_to_move_opponent_one_field_up :- opponents_movement_counter(5), players_movement_counter(2), move_opponent_up, update_movement_counters(5).
+try_to_move_opponent_one_field_up :- opponents_movement_counter(27), players_movement_counter(2), move_opponent_up, update_movement_counters(27).
+try_to_move_opponent_one_field_up :- opponents_movement_counter(28), players_movement_counter(2), move_opponent_up, update_movement_counters(28).
+try_to_move_opponent_one_field_up :- opponents_movement_counter(29), players_movement_counter(2), move_opponent_up, update_movement_counters(29).
+try_to_move_opponent_one_field_up :- opponents_movement_counter(33), players_movement_counter(2), move_opponent_up, update_movement_counters(33).
+try_to_move_opponent_one_field_up :- opponents_movement_counter(34), players_movement_counter(2), move_opponent_up, update_movement_counters(34).
+try_to_move_opponent_one_field_up :- opponents_movement_counter(35), players_movement_counter(2), move_opponent_up, update_movement_counters(35).
 
-zrob_krok_w_dol :- opponents_movement_counter(9), players_movement_counter(2), move_opponent_down, update_movement_counters(9).
-zrob_krok_w_dol :- opponents_movement_counter(10), players_movement_counter(2), move_opponent_down, update_movement_counters(10).
-zrob_krok_w_dol :- opponents_movement_counter(11), players_movement_counter(2), move_opponent_down, update_movement_counters(11).
-zrob_krok_w_dol :- opponents_movement_counter(15), players_movement_counter(2), move_opponent_down, update_movement_counters(15).
-zrob_krok_w_dol :- opponents_movement_counter(16), players_movement_counter(2), move_opponent_down, update_movement_counters(16).
-zrob_krok_w_dol :- opponents_movement_counter(17), players_movement_counter(2), move_opponent_down, update_movement_counters(17).
-zrob_krok_w_dol :- opponents_movement_counter(21), players_movement_counter(2), move_opponent_down, update_movement_counters(21).
-zrob_krok_w_dol :- opponents_movement_counter(22), players_movement_counter(2), move_opponent_down, update_movement_counters(22).
-zrob_krok_w_dol :- opponents_movement_counter(23), players_movement_counter(2), move_opponent_down, update_movement_counters(23).
+try_to_move_opponent_one_field_down :- opponents_movement_counter(9), players_movement_counter(2), move_opponent_down, update_movement_counters(9).
+try_to_move_opponent_one_field_down :- opponents_movement_counter(10), players_movement_counter(2), move_opponent_down, update_movement_counters(10).
+try_to_move_opponent_one_field_down :- opponents_movement_counter(11), players_movement_counter(2), move_opponent_down, update_movement_counters(11).
+try_to_move_opponent_one_field_down :- opponents_movement_counter(15), players_movement_counter(2), move_opponent_down, update_movement_counters(15).
+try_to_move_opponent_one_field_down :- opponents_movement_counter(16), players_movement_counter(2), move_opponent_down, update_movement_counters(16).
+try_to_move_opponent_one_field_down :- opponents_movement_counter(17), players_movement_counter(2), move_opponent_down, update_movement_counters(17).
+try_to_move_opponent_one_field_down :- opponents_movement_counter(21), players_movement_counter(2), move_opponent_down, update_movement_counters(21).
+try_to_move_opponent_one_field_down :- opponents_movement_counter(22), players_movement_counter(2), move_opponent_down, update_movement_counters(22).
+try_to_move_opponent_one_field_down :- opponents_movement_counter(23), players_movement_counter(2), move_opponent_down, update_movement_counters(23).
 
-zrob_krok_w_lewo :- opponents_movement_counter(18), players_movement_counter(2), move_opponent_left, update_movement_counters(18).
-zrob_krok_w_lewo :- opponents_movement_counter(19), players_movement_counter(2), move_opponent_left, update_movement_counters(19).
-zrob_krok_w_lewo :- opponents_movement_counter(20), players_movement_counter(2), move_opponent_left, update_movement_counters(20).
-zrob_krok_w_lewo :- opponents_movement_counter(24), players_movement_counter(2), move_opponent_left, update_movement_counters(24).
-zrob_krok_w_lewo :- opponents_movement_counter(25), players_movement_counter(2), move_opponent_left, update_movement_counters(25).
-zrob_krok_w_lewo :- opponents_movement_counter(26), players_movement_counter(2), move_opponent_left, update_movement_counters(26).
-zrob_krok_w_lewo :- opponents_movement_counter(30), players_movement_counter(2), move_opponent_left, update_movement_counters(30).
-zrob_krok_w_lewo :- opponents_movement_counter(31), players_movement_counter(2), move_opponent_left, update_movement_counters(31).
-zrob_krok_w_lewo :- opponents_movement_counter(32), players_movement_counter(2), move_opponent_left, update_movement_counters(32).
+try_to_move_opponent_one_field_to_the_left :- opponents_movement_counter(18), players_movement_counter(2), move_opponent_left, update_movement_counters(18).
+try_to_move_opponent_one_field_to_the_left :- opponents_movement_counter(19), players_movement_counter(2), move_opponent_left, update_movement_counters(19).
+try_to_move_opponent_one_field_to_the_left :- opponents_movement_counter(20), players_movement_counter(2), move_opponent_left, update_movement_counters(20).
+try_to_move_opponent_one_field_to_the_left :- opponents_movement_counter(24), players_movement_counter(2), move_opponent_left, update_movement_counters(24).
+try_to_move_opponent_one_field_to_the_left :- opponents_movement_counter(25), players_movement_counter(2), move_opponent_left, update_movement_counters(25).
+try_to_move_opponent_one_field_to_the_left :- opponents_movement_counter(26), players_movement_counter(2), move_opponent_left, update_movement_counters(26).
+try_to_move_opponent_one_field_to_the_left :- opponents_movement_counter(30), players_movement_counter(2), move_opponent_left, update_movement_counters(30).
+try_to_move_opponent_one_field_to_the_left :- opponents_movement_counter(31), players_movement_counter(2), move_opponent_left, update_movement_counters(31).
+try_to_move_opponent_one_field_to_the_left :- opponents_movement_counter(32), players_movement_counter(2), move_opponent_left, update_movement_counters(32).
 
 
 % usuniecie z bazy wiedzy potencjalnego poprzedniego kierunku patrzenia (konieczne, gdy nastąpiła zmiana kierunku chodu):
