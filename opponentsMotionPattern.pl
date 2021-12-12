@@ -4,10 +4,10 @@
 popatrz_w_strone(gracz) :- zaniepokojony(opponent).
 zaczyna_obchod(opponent) :- calm(opponent), players_movement_counter(1), opponents_movement_counter(0).
 
-:- dynamic opponent_patrzy_w_prawo/0, opponent_patrzy_w_lewo/0, opponent_patrzy_w_gore/0, opponent_patrzy_w_dol/0.
+:- dynamic opponent_looks/1.
 
 % przeciwnik patrzy w prawo na początku, bo tak xd
-:- asserta(opponent_patrzy_w_prawo).
+:- asserta(opponent_looks(right)).
 :- asserta(opponents_movement_counter(0)).
 
 % #################### OBCHÓD ####################
@@ -60,16 +60,14 @@ try_to_move_opponent_one_field_to_the_left :- opponents_movement_counter(32), pl
 
 
 % usuniecie z bazy wiedzy potencjalnego poprzedniego kierunku patrzenia (konieczne, gdy nastąpiła zmiana kierunku chodu):
-remove_looking_directions :- retractall(opponent_patrzy_w_lewo), retractall(opponent_patrzy_w_prawo), retractall(opponent_patrzy_w_gore), retractall(opponent_patrzy_w_dol).
-% todo: ładniej to zrobić z tym asserta(opponent_looks(direction)).
+remove_looking_directions :- retractall(opponent_looks(_)).
 
 % update movement counters mod 36 - reaching 36 means that the opponent walked the full circle
 update_movement_counters(OldValue) :- NewValue is OldValue + 1, NewValue == 36, retract(opponents_movement_counter(OldValue)), asserta(opponents_movement_counter(0)).
 update_movement_counters(OldValue) :- NewValue is OldValue + 1, NewValue \= 36, retract(opponents_movement_counter(OldValue)), asserta(opponents_movement_counter(NewValue)).
 
-% move opponent by one field in specified direction
-% patrzenie w tę samą stronę, w którą odbywają się kroki
-move_opponent_right :- position(opponent, X, Y), NewX is X + 1, step_opponent(NewX, Y), remove_looking_directions, asserta(opponent_patrzy_w_prawo).
-move_opponent_left :- position(opponent, X, Y), NewX is X - 1, step_opponent(NewX, Y), remove_looking_directions, asserta(opponent_patrzy_w_lewo).
-move_opponent_up :- position(opponent, X, Y), NewY is Y + 1, step_opponent(X, NewY), remove_looking_directions, asserta(opponent_patrzy_w_gore).
-move_opponent_down :- position(opponent, X, Y), NewY is Y - 1, step_opponent(X, NewY), remove_looking_directions, asserta(opponent_patrzy_w_dol).
+% move opponent by one field in specified direction and make them look in this direction
+move_opponent_right :- position(opponent, X, Y), NewX is X + 1, step_opponent(NewX, Y), remove_looking_directions, asserta(opponent_looks(right)).
+move_opponent_left :- position(opponent, X, Y), NewX is X - 1, step_opponent(NewX, Y), remove_looking_directions, asserta(opponent_looks(left)).
+move_opponent_up :- position(opponent, X, Y), NewY is Y + 1, step_opponent(X, NewY), remove_looking_directions, asserta(opponent_looks(up)).
+move_opponent_down :- position(opponent, X, Y), NewY is Y - 1, step_opponent(X, NewY), remove_looking_directions, asserta(opponent_looks(down)).
