@@ -1,2 +1,11 @@
 # Project for Expert Systems - a stealth game
-Run this way: ```swi-prolog.swipl opponentsStates.pl movement.pl opponentsMotionPattern.pl```
+
+Required libraries:
+- pyswip
+```
+pip install -r requirements.txt
+```
+To start GUI:
+```
+py main.py
+```
