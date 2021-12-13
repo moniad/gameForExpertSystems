@@ -1,8 +1,7 @@
-=================== stany przeciwnika ===============
-# zmiana stanu następuje dopiero po tym, jak nastapily_dwa_ruchy_gracza
+%=================== stany przeciwnika ===============
 
-spokojny(przeciwnik) :- nastapily_dwa_ruchy_gracza, odleglosc(gracz, przeciwnik, 1-7), kuca(gracz). # predykaty o wygranej i przegranej mają być najwyżej
-spokojny(przeciwnik) :- nastapily_dwa_ruchy_gracza, odleglosc(gracz, przeciwnik, _). # >7 w każdą stronę
+calm(opponent) :- distance(player, opponent, DIST), DIST >= 1, DIST =< 7, crawls(player).
+calm(opponent) :- distance(player, opponent, DIST), DIST >= 7.
 
-zaniepokojony(przeciwnik) :- nastapily_dwa_ruchy_gracza, odleglosc(gracz, przeciwnik, 1-7), stoi(gracz). # przeciwnik wyczuwa/słyszy gracza, wiec staje sie zaniepokojony
-# TODO: odległość
+disturbed(opponent) :- distance(player, opponent, DIST), DIST >= 1, DIST =< 7, not(crawls(player)).
+distance(A, B, C) :- position(A, X, Y), position(B, Z, W), C is min(abs(X-Z), abs(Y-W)).
