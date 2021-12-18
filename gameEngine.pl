@@ -12,8 +12,8 @@
 %=================== wygrana/przegrana ===============
 
 %# gdy przeciwnik widzi gracza, gracz przegrywa
-dies(player) :- distance(player, opponent, DIST), DIST =< 5, not(crawls(player)).
-dies(player) :- in_opponent_fov(player).
+loses(player) :- distance(player, opponent, DIST), DIST =< 5, not(crawls(player)).
+loses(player) :- in_opponent_fov(player).
 
 wins(player) :- calm(opponent), distance(player, opponent, DIST), DIST = 1, crawls(player).
 
