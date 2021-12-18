@@ -23,3 +23,5 @@ make_stand :- retract(crawls(player)).
 update_players_movement_counter :- players_movement_counter(0), retract(players_movement_counter(0)), asserta(players_movement_counter(1)).
 % synchro with opponent's movement
 update_players_movement_counter :- players_movement_counter(1), move_opponent, retract(players_movement_counter(1)), asserta(players_movement_counter(0)).
+
+distance(player, opponent, DIST) :- position(player, PX, PY), position(opponent, OX, OY), DIST is max(abs(PX - OX), abs(PY - OY)).

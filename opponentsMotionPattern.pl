@@ -4,7 +4,7 @@
 popatrz_w_strone(gracz) :- zaniepokojony(opponent).
 zaczyna_obchod(opponent) :- calm(opponent), players_movement_counter(1), opponents_movement_counter(0).
 
-:- dynamic opponent_looks/1.
+:- dynamic opponent_looks/1, opponents_movement_counter/1.
 
 % przeciwnik patrzy w prawo na początku, bo tak xd
 opponent_looks(right).
@@ -16,6 +16,7 @@ move_opponent :- try_to_move_opponent_one_field_to_the_right.
 move_opponent :- try_to_move_opponent_one_field_to_the_left.
 move_opponent :- try_to_move_opponent_one_field_up.
 move_opponent :- try_to_move_opponent_one_field_down.
+move_opponent :- opponents_movement_counter(OldValue), skip_3_steps(OldValue), move_opponent. % if opponent hits the wall, skip 3 steps and move them in a different direction
 
 % obchod zaczyna sie od 3 krokow w prawo, a potem w gore
 try_to_move_opponent_one_field_to_the_right :- opponents_movement_counter(0), players_movement_counter(1), move_opponent_right, update_movement_counters(0).
@@ -65,6 +66,9 @@ remove_looking_directions :- retractall(opponent_looks(_)).
 % update movement counters mod 36 - reaching 36 means that the opponent walked the full circle
 update_movement_counters(OldValue) :- NewValue is OldValue + 1, NewValue == 36, retract(opponents_movement_counter(OldValue)), asserta(opponents_movement_counter(0)).
 update_movement_counters(OldValue) :- NewValue is OldValue + 1, NewValue \= 36, retract(opponents_movement_counter(OldValue)), asserta(opponents_movement_counter(NewValue)).
+
+% opponent hit the wall, so skipping the move in the direction in which it was impossible to move (by incrementing the counter by 3)
+skip_3_steps(OldValue) :- NewValue is (OldValue + 3) mod 36, retract(opponents_movement_counter(OldValue)), asserta(opponents_movement_counter(NewValue)).
 
 % move opponent by one field in specified direction and make them look in this direction
 move_opponent_right :- position(opponent, X, Y), NewX is X + 1, step_opponent(NewX, Y), remove_looking_directions, asserta(opponent_looks(right)).
