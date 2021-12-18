@@ -1,71 +1,73 @@
-=================== ruchy przeciwnika ===============
+%=================== ruchy opponenta ===============
 
-popatrz_w_strone(gracz) :- zaniepokojony(przeciwnik).
+% TODO: zintegrować z zaczyna_obchod i patrzeniem w stronę gracza!!!
+popatrz_w_strone(gracz) :- zaniepokojony(opponent).
+zaczyna_obchod(opponent) :- calm(opponent), players_movement_counter(1), opponents_movement_counter(0).
 
-:- dynamic ma_wartosc/2, zmien_pozycje/3, pozycja/3.
+:- dynamic opponent_looks/1.
 
-#################### OBCHÓD ####################
-zaczyna_obchod(przeciwnik) :- spokojny(przeciwnik).
-# zerowanie licznika kroków, gdy przeciwnik zaczyna obchód lub zrobił pełny obchód
-retract(ma_wartosc(licznik_krokow, _)) :- zaczyna_obchod(przeciwnik).
-retract(ma_wartosc(licznik_krokow, _)) :- ma_wartosc(licznik_krokow, 36).
-ma_wartosc(licznik_krokow, 0) :- zaczyna_obchod(przeciwnik).
-ma_wartosc(licznik_krokow, 0) :- ma_wartosc(licznik_krokow, 36).
+% przeciwnik patrzy w prawo na początku, bo tak xd
+opponent_looks(right).
+opponents_movement_counter(0).
+
+% #################### OBCHÓD ####################
+
+move_opponent :- try_to_move_opponent_one_field_to_the_right.
+move_opponent :- try_to_move_opponent_one_field_to_the_left.
+move_opponent :- try_to_move_opponent_one_field_up.
+move_opponent :- try_to_move_opponent_one_field_down.
+
+% obchod zaczyna sie od 3 krokow w prawo, a potem w gore
+try_to_move_opponent_one_field_to_the_right :- opponents_movement_counter(0), players_movement_counter(1), move_opponent_right, update_movement_counters(0).
+try_to_move_opponent_one_field_to_the_right :- opponents_movement_counter(1), players_movement_counter(1), move_opponent_right, update_movement_counters(1).
+try_to_move_opponent_one_field_to_the_right :- opponents_movement_counter(2), players_movement_counter(1), move_opponent_right, update_movement_counters(2).
+try_to_move_opponent_one_field_to_the_right :- opponents_movement_counter(6), players_movement_counter(1), move_opponent_right, update_movement_counters(6).
+try_to_move_opponent_one_field_to_the_right :- opponents_movement_counter(7), players_movement_counter(1), move_opponent_right, update_movement_counters(7).
+try_to_move_opponent_one_field_to_the_right :- opponents_movement_counter(8), players_movement_counter(1), move_opponent_right, update_movement_counters(8).
+try_to_move_opponent_one_field_to_the_right :- opponents_movement_counter(12), players_movement_counter(1), move_opponent_right, update_movement_counters(12).
+try_to_move_opponent_one_field_to_the_right :- opponents_movement_counter(13), players_movement_counter(1), move_opponent_right, update_movement_counters(13).
+try_to_move_opponent_one_field_to_the_right :- opponents_movement_counter(14), players_movement_counter(1), move_opponent_right, update_movement_counters(14).
+
+try_to_move_opponent_one_field_up :- opponents_movement_counter(3), players_movement_counter(1), move_opponent_up, update_movement_counters(3).
+try_to_move_opponent_one_field_up :- opponents_movement_counter(4), players_movement_counter(1), move_opponent_up, update_movement_counters(4).
+try_to_move_opponent_one_field_up :- opponents_movement_counter(5), players_movement_counter(1), move_opponent_up, update_movement_counters(5).
+try_to_move_opponent_one_field_up :- opponents_movement_counter(27), players_movement_counter(1), move_opponent_up, update_movement_counters(27).
+try_to_move_opponent_one_field_up :- opponents_movement_counter(28), players_movement_counter(1), move_opponent_up, update_movement_counters(28).
+try_to_move_opponent_one_field_up :- opponents_movement_counter(29), players_movement_counter(1), move_opponent_up, update_movement_counters(29).
+try_to_move_opponent_one_field_up :- opponents_movement_counter(33), players_movement_counter(1), move_opponent_up, update_movement_counters(33).
+try_to_move_opponent_one_field_up :- opponents_movement_counter(34), players_movement_counter(1), move_opponent_up, update_movement_counters(34).
+try_to_move_opponent_one_field_up :- opponents_movement_counter(35), players_movement_counter(1), move_opponent_up, update_movement_counters(35).
+
+try_to_move_opponent_one_field_down :- opponents_movement_counter(9), players_movement_counter(1), move_opponent_down, update_movement_counters(9).
+try_to_move_opponent_one_field_down :- opponents_movement_counter(10), players_movement_counter(1), move_opponent_down, update_movement_counters(10).
+try_to_move_opponent_one_field_down :- opponents_movement_counter(11), players_movement_counter(1), move_opponent_down, update_movement_counters(11).
+try_to_move_opponent_one_field_down :- opponents_movement_counter(15), players_movement_counter(1), move_opponent_down, update_movement_counters(15).
+try_to_move_opponent_one_field_down :- opponents_movement_counter(16), players_movement_counter(1), move_opponent_down, update_movement_counters(16).
+try_to_move_opponent_one_field_down :- opponents_movement_counter(17), players_movement_counter(1), move_opponent_down, update_movement_counters(17).
+try_to_move_opponent_one_field_down :- opponents_movement_counter(21), players_movement_counter(1), move_opponent_down, update_movement_counters(21).
+try_to_move_opponent_one_field_down :- opponents_movement_counter(22), players_movement_counter(1), move_opponent_down, update_movement_counters(22).
+try_to_move_opponent_one_field_down :- opponents_movement_counter(23), players_movement_counter(1), move_opponent_down, update_movement_counters(23).
+
+try_to_move_opponent_one_field_to_the_left :- opponents_movement_counter(18), players_movement_counter(1), move_opponent_left, update_movement_counters(18).
+try_to_move_opponent_one_field_to_the_left :- opponents_movement_counter(19), players_movement_counter(1), move_opponent_left, update_movement_counters(19).
+try_to_move_opponent_one_field_to_the_left :- opponents_movement_counter(20), players_movement_counter(1), move_opponent_left, update_movement_counters(20).
+try_to_move_opponent_one_field_to_the_left :- opponents_movement_counter(24), players_movement_counter(1), move_opponent_left, update_movement_counters(24).
+try_to_move_opponent_one_field_to_the_left :- opponents_movement_counter(25), players_movement_counter(1), move_opponent_left, update_movement_counters(25).
+try_to_move_opponent_one_field_to_the_left :- opponents_movement_counter(26), players_movement_counter(1), move_opponent_left, update_movement_counters(26).
+try_to_move_opponent_one_field_to_the_left :- opponents_movement_counter(30), players_movement_counter(1), move_opponent_left, update_movement_counters(30).
+try_to_move_opponent_one_field_to_the_left :- opponents_movement_counter(31), players_movement_counter(1), move_opponent_left, update_movement_counters(31).
+try_to_move_opponent_one_field_to_the_left :- opponents_movement_counter(32), players_movement_counter(1), move_opponent_left, update_movement_counters(32).
 
 
-# obchod zaczyna sie od 3 krokow w prawo, a potem w gore
-zrob_krok_w_prawo :- ma_wartosc_z_zakresu(licznik_krokow, [0, 1, 2, 6, 7, 8, 12, 13, 14]), nastapily_dwa_ruchy_gracza.
-zrob_krok_w_gore :- ma_wartosc_z_zakresu(licznik_krokow, [3, 4, 5, 27, 28, 29, 33, 34, 35]), nastapily_dwa_ruchy_gracza.
-zrob_krok_w_dol :- ma_wartosc_z_zakresu(licznik_krokow, [9, 10, 11, 15, 16, 17, 21, 22, 23]), nastapily_dwa_ruchy_gracza.
-zrob_krok_w_lewo :- ma_wartosc_z_zakresu(licznik_krokow, [18, 19, 20, 24, 25, 26, 30, 31, 32]), nastapily_dwa_ruchy_gracza.
+% usuniecie z bazy wiedzy potencjalnego poprzedniego kierunku patrzenia (konieczne, gdy nastąpiła zmiana kierunku chodu):
+remove_looking_directions :- retractall(opponent_looks(_)).
 
-# czy element należy do listy
-ma_wartosc_z_zakresu(licznik_krokow, [licznik_krokow | _]).
-ma_wartosc_z_zakresu(licznik_krokow, [_ | T]) :- ma_wartosc_z_zakresu(licznik_krokow, T).
+% update movement counters mod 36 - reaching 36 means that the opponent walked the full circle
+update_movement_counters(OldValue) :- NewValue is OldValue + 1, NewValue == 36, retract(opponents_movement_counter(OldValue)), asserta(opponents_movement_counter(0)).
+update_movement_counters(OldValue) :- NewValue is OldValue + 1, NewValue \= 36, retract(opponents_movement_counter(OldValue)), asserta(opponents_movement_counter(NewValue)).
 
-
-# usuniecie z bazy wiedzy potencjalnego poprzedniego kierunku patrzenia (konieczne, gdy nastąpiła zmiana kierunku chodu):
-retract(przeciwnik_patrzy_w_lewo) :- zrob_krok_w_prawo.
-retract(przeciwnik_patrzy_w_gore) :- zrob_krok_w_prawo.
-retract(przeciwnik_patrzy_w_dol) :- zrob_krok_w_prawo.
-
-retract(przeciwnik_patrzy_w_prawo) :- zrob_krok_w_lewo.
-retract(przeciwnik_patrzy_w_gore) :- zrob_krok_w_lewo.
-retract(przeciwnik_patrzy_w_dol) :- zrob_krok_w_lewo.
-
-retract(przeciwnik_patrzy_w_prawo) :- zrob_krok_w_gore.
-retract(przeciwnik_patrzy_w_lewo) :- zrob_krok_w_gore.
-retract(przeciwnik_patrzy_w_dol) :- zrob_krok_w_gore.
-
-retract(przeciwnik_patrzy_w_prawo) :- zrob_krok_w_dol.
-retract(przeciwnik_patrzy_w_lewo) :- zrob_krok_w_dol.
-retract(przeciwnik_patrzy_w_gore) :- zrob_krok_w_dol.
-
-
-# patrzenie w tę samą stronę, w którą odbywają się kroki
-przeciwnik_patrzy_w_prawo :- zrob_krok_w_prawo.
-przeciwnik_patrzy_w_lewo :- zrob_krok_w_lewo.
-przeciwnik_patrzy_w_gore :- zrob_krok_w_gore.
-przeciwnik_patrzy_w_dol :- zrob_krok_w_dol.
-
-
-zmien_pozycje(przeciwnik, x + 1, y) :- zrob_krok_w_prawo.
-zmien_pozycje(przeciwnik, x, y + 1) :- zrob_krok_w_gore.
-zmien_pozycje(przeciwnik, x, y - 1) :- zrob_krok_w_dol.
-zmien_pozycje(przeciwnik, x - 1, y) :- zrob_krok_w_lewo.
-
-
-# usuniecie z bazy wiedzy poprzedniej pozycji przeciwnika, aktualnego kierunku kroku przeciwnika i zmiennej mowiacej, ze przeciwnik moze wykonac kolejny ruch
-retract(nastapily_dwa_ruchy_gracza) :- zmien_pozycje(przeciwnik, _, _).
-retract(zrob_krok_w_prawo) :- zmien_pozycje(przeciwnik, _, _).
-retract(zrob_krok_w_lewo) :- zmien_pozycje(przeciwnik, _, _).
-retract(zrob_krok_w_gore) :- zmien_pozycje(przeciwnik, _, _).
-retract(zrob_krok_w_dol) :- zmien_pozycje(przeciwnik, _, _).
-retract(pozycja(przeciwnik, _, _)) :- zmien_pozycje(przeciwnik, _, _).
-pozycja(przeciwnik, X, Y) :- zmien_pozycje(przeciwnik, X, Y).
-
-# zwiekszanie wartosci licznika krokow przy zmianie pozycji
-ma_wartosc(licznik_krokow, licznik_krokow + 1) :- zmien_pozycje(przeciwnik, _, _).
-# wyrzucenie z bazy wiedzy poprzedniej wartości licznika oraz predykatu zmiany pozycji przeciwnika
-retract(ma_wartosc(licznik_krokow, licznik_krokow - 1) :- zmien_pozycje(przeciwnik, _, _).
-retract(zmien_pozycje(przeciwnik, _, _)).
+% move opponent by one field in specified direction and make them look in this direction
+move_opponent_right :- position(opponent, X, Y), NewX is X + 1, step_opponent(NewX, Y), remove_looking_directions, asserta(opponent_looks(right)).
+move_opponent_left :- position(opponent, X, Y), NewX is X - 1, step_opponent(NewX, Y), remove_looking_directions, asserta(opponent_looks(left)).
+move_opponent_up :- position(opponent, X, Y), NewY is Y + 1, step_opponent(X, NewY), remove_looking_directions, asserta(opponent_looks(up)).
+move_opponent_down :- position(opponent, X, Y), NewY is Y - 1, step_opponent(X, NewY), remove_looking_directions, asserta(opponent_looks(down)).
