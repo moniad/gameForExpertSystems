@@ -7,8 +7,8 @@ zaczyna_obchod(opponent) :- calm(opponent), players_movement_counter(1), opponen
 :- dynamic opponent_looks/1.
 
 % przeciwnik patrzy w prawo na początku, bo tak xd
-:- asserta(opponent_looks(right)).
-:- asserta(opponents_movement_counter(0)).
+opponent_looks(right).
+opponents_movement_counter(0).
 
 % #################### OBCHÓD ####################
 

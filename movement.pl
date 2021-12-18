@@ -6,9 +6,9 @@ position(player, 0, 0).
 position(opponent, 8, 8).
 players_movement_counter(0).
 
-%# move_player_to_the_left/right/etc., make_crawl i make_stand to eventy z poziomu Pythona
-move_player_to_the_left :- position(player, X, Y), S is X - 1, step_player(S, Y).
-move_player_to_the_right :- position(player, X, Y), S is X + 1, step_player(S, Y).
+%# move_player_left/right/etc., make_crawl i make_stand to eventy z poziomu Pythona
+move_player_left :- position(player, X, Y), S is X - 1, step_player(S, Y).
+move_player_right :- position(player, X, Y), S is X + 1, step_player(S, Y).
 move_player_up :- position(player, X, Y), S is Y + 1, step_player(X, S).
 move_player_down :- position(player, X, Y), S is Y - 1, step_player(X, S).
 
