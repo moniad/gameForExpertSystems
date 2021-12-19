@@ -1,21 +1,28 @@
 %=================== ruchy opponenta ===============
-
-% TODO: zintegrować z zaczyna_obchod i patrzeniem w stronę gracza!!!
-popatrz_w_strone(gracz) :- zaniepokojony(opponent).
-zaczyna_obchod(opponent) :- calm(opponent), players_movement_counter(1), opponents_movement_counter(0).
-
 :- dynamic opponent_looks/1, opponents_movement_counter/1.
 
 % przeciwnik patrzy w prawo na początku, bo tak xd
 opponent_looks(right).
 opponents_movement_counter(0).
 
-% #################### OBCHÓD ####################
+move_opponent :- calm(opponent), make_a_circuit_step_in_calm_state.
+move_opponent :- disturbed(opponent), make_a_move_in_disturbed_state.
 
-move_opponent :- try_to_move_opponent_one_field_to_the_right.
-move_opponent :- try_to_move_opponent_one_field_to_the_left.
-move_opponent :- try_to_move_opponent_one_field_up.
-move_opponent :- try_to_move_opponent_one_field_down.
+% #################### MOVE IN DISTURBED STATE ####################
+make_a_move_in_disturbed_state :- x_diff_greater_than_or_eq_y_diff, is_on_the_left(player, opponent), move_opponent_left, update_movement_counter_in_disturbed_state(18).
+make_a_move_in_disturbed_state :- x_diff_greater_than_or_eq_y_diff, is_on_the_right(player, opponent), move_opponent_right, update_movement_counter_in_disturbed_state(0).
+make_a_move_in_disturbed_state :- y_diff_greater_than_x_diff, is_above(player, opponent), move_opponent_up, update_movement_counter_in_disturbed_state(3).
+make_a_move_in_disturbed_state :- y_diff_greater_than_x_diff, is_below(player, opponent), move_opponent_down, update_movement_counter_in_disturbed_state(9).
+
+x_diff_greater_than_or_eq_y_diff :- position(player, PX, PY), position(opponent, OX, OY), X_DIFF is abs(PX - OX), Y_DIFF is abs(PY - OY), X_DIFF >= Y_DIFF.
+y_diff_greater_than_x_diff :- position(player, PX, PY), position(opponent, OX, OY), X_DIFF is abs(PX - OX), Y_DIFF is abs(PY - OY), Y_DIFF > X_DIFF.
+
+% #################### CIRCUIT ####################
+make_a_circuit_step_in_calm_state :- try_to_move_opponent_one_field_to_the_right.
+make_a_circuit_step_in_calm_state :- try_to_move_opponent_one_field_to_the_left.
+make_a_circuit_step_in_calm_state :- try_to_move_opponent_one_field_up.
+make_a_circuit_step_in_calm_state :- try_to_move_opponent_one_field_down.
+make_a_circuit_step_in_calm_state :- opponents_movement_counter(OldValue), skip_3_steps(OldValue). % if opponent hits the wall, skip 3 steps and move them in a different direction
 
 % obchod zaczyna sie od 3 krokow w prawo, a potem w gore
 try_to_move_opponent_one_field_to_the_right :- opponents_movement_counter(0), players_movement_counter(1), move_opponent_right, update_movement_counters(0).
@@ -65,6 +72,13 @@ remove_looking_directions :- retractall(opponent_looks(_)).
 % update movement counters mod 36 - reaching 36 means that the opponent walked the full circle
 update_movement_counters(OldValue) :- NewValue is OldValue + 1, NewValue == 36, retract(opponents_movement_counter(OldValue)), asserta(opponents_movement_counter(0)).
 update_movement_counters(OldValue) :- NewValue is OldValue + 1, NewValue \= 36, retract(opponents_movement_counter(OldValue)), asserta(opponents_movement_counter(NewValue)).
+
+% opponent hit the wall, so skipping the move in the direction in which it was impossible to move (by incrementing the counter by 3)
+skip_3_steps(OldValue) :- NewValue is OldValue + 3, NewValue >= 36, NewValue is NewValue - 36, retract(opponents_movement_counter(OldValue)), asserta(opponents_movement_counter(NewValue)).
+skip_3_steps(OldValue) :- NewValue is OldValue + 3, retract(opponents_movement_counter(OldValue)), asserta(opponents_movement_counter(NewValue)).
+
+% counter update in disturbed state
+update_movement_counter_in_disturbed_state(NewValue) :- retractall(opponents_movement_counter(_)), asserta(opponents_movement_counter(NewValue)).
 
 % move opponent by one field in specified direction and make them look in this direction
 move_opponent_right :- position(opponent, X, Y), NewX is X + 1, step_opponent(NewX, Y), remove_looking_directions, asserta(opponent_looks(right)).

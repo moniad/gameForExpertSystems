@@ -6,8 +6,10 @@ from pyswip import Prolog
 class StealthGame:
     def __init__(self):
         self.prolog = Prolog()
-        self.prolog.consult('movement.pl')
+        self.prolog.consult('opponentsStates.pl')
         self.prolog.consult('opponentsFieldOfView.pl')
+        self.prolog.consult('gameEngine.pl')
+        self.prolog.consult('movement.pl')
         self.prolog.consult('opponentsMotionPattern.pl')
 
         self.position = 'STAND'
@@ -48,6 +50,7 @@ class StealthGame:
         key_pressed = event.keysym
         if self.check_if_key_valid(key_pressed):
             self.move(key_pressed)
+            # todo: tutaj sprawdzić, czy nie nastąpiła wygrana/przegrana (wins/loses(player)
 
     def check_if_key_valid(self, key):
         valid_keys = ["Up", "Down", "Left", "Right"]
@@ -107,6 +110,7 @@ class StealthGame:
         else:
             self.button_text.set('STAND')
             self.position = 'CRAWL'
+        # todo: Prolog może nie pozwolić crawlować, jeśli już było 5 ruchów w kucki, musimy sprawdzać długość listy
         list(self.prolog.query(self.get_query_for_position(self.position)))
         '''
         crawls = list(self.prolog.query('crawls(player).'))
