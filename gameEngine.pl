@@ -19,9 +19,9 @@ wins(player) :- calm(opponent), distance(player, opponent, DIST), DIST = 1, craw
 
 %----------------- pytania ------------------
 %- w Prologu jest domyślnie backward chaining - czyli apka ma działać tak, że odpytujemy z poziomu aplikacji
-%Pythonowej o to, czy po wykonaniu ruchu gracz wygrywa/przegrywa, gdzie przesunąć gracza i przeciwnika?
+%Pythonowej o to, czy po wykonaniu ruchu gracz wygrywa/przegrywa, gdzie przesunąć gracza i przeciwnika? Y
 %- czy da się wywnioskować dwa predykaty, jeśli ich przesłanka złożona z jednego predykatu bedzie prawdziwa?
-%np. # patrzenie w tę samą stronę, w którą odbywają się kroki
+%np. # patrzenie w tę samą stronę, w którą odbywają się kroki. ANS: Napisać nowy wniosek, który ma w koniunkcji te dwa
 %chyba wystarczy nie zastosować operatora cięcia? wtedy wszystkie predykaty, które są prawdziwe powinny zostać
 %wyprowadzone? chociaż to jest forward chaining...
 %- czy początkową pozycję gracza i przeciwnika możemy wstawić poprzez wywołanie Prologa z poziomu Pythona?
