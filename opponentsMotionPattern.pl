@@ -22,8 +22,7 @@ make_a_circuit_step_in_calm_state :- try_to_move_opponent_one_field_to_the_right
 make_a_circuit_step_in_calm_state :- try_to_move_opponent_one_field_to_the_left.
 make_a_circuit_step_in_calm_state :- try_to_move_opponent_one_field_up.
 make_a_circuit_step_in_calm_state :- try_to_move_opponent_one_field_down.
-% FIXME: the line below caused GUI freezes :(
-%make_a_circuit_step_in_calm_state :- opponents_movement_counter(OldValue), skip_3_steps(OldValue), move_opponent. % if opponent hits the wall, skip 3 steps and move them in a different direction
+make_a_circuit_step_in_calm_state :- opponents_movement_counter(OldValue), skip_3_steps(OldValue). % if opponent hits the wall, skip 3 steps and move them in a different direction
 
 % obchod zaczyna sie od 3 krokow w prawo, a potem w gore
 try_to_move_opponent_one_field_to_the_right :- opponents_movement_counter(0), players_movement_counter(1), move_opponent_right, update_movement_counters(0).
@@ -75,7 +74,8 @@ update_movement_counters(OldValue) :- NewValue is OldValue + 1, NewValue == 36, 
 update_movement_counters(OldValue) :- NewValue is OldValue + 1, NewValue \= 36, retract(opponents_movement_counter(OldValue)), asserta(opponents_movement_counter(NewValue)).
 
 % opponent hit the wall, so skipping the move in the direction in which it was impossible to move (by incrementing the counter by 3)
-skip_3_steps(OldValue) :- NewValue is (OldValue + 3) mod 36, retract(opponents_movement_counter(OldValue)), asserta(opponents_movement_counter(NewValue)).
+skip_3_steps(OldValue) :- NewValue is OldValue + 3, NewValue >= 36, NewValue is NewValue - 36, retract(opponents_movement_counter(OldValue)), asserta(opponents_movement_counter(NewValue)).
+skip_3_steps(OldValue) :- NewValue is OldValue + 3, retract(opponents_movement_counter(OldValue)), asserta(opponents_movement_counter(NewValue)).
 
 % counter update in disturbed state
 update_movement_counter_in_disturbed_state(NewValue) :- retractall(opponents_movement_counter(_)), asserta(opponents_movement_counter(NewValue)).
