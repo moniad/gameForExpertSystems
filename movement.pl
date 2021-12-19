@@ -33,6 +33,7 @@ make_stand :- retract(crawls(player)), reset_crawling_counter.
 reset_crawling_counter :- retractall(players_crawling_counter(_)), asserta(players_crawling_counter(0)).
 
 %# update flagi dla kolejnego kroku w obchodzie przeciwnika - uwzględnia pierwszy ruch gracza przed ruchem przeciwnika
+update_players_movement_counter :- game_over, retractall(players_movement_counter(_)). % prevents opponent from making next move in case player wins
 update_players_movement_counter :- players_movement_counter(0), retract(players_movement_counter(0)), asserta(players_movement_counter(1)).
 % synchro with opponent's movement
 update_players_movement_counter :- players_movement_counter(1), move_opponent, retract(players_movement_counter(1)), asserta(players_movement_counter(0)).
