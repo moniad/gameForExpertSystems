@@ -4,7 +4,7 @@
 popatrz_w_strone(gracz) :- zaniepokojony(opponent).
 zaczyna_obchod(opponent) :- calm(opponent), players_movement_counter(1), opponents_movement_counter(0).
 
-:- dynamic opponent_looks/1.
+:- dynamic opponent_looks/1, opponents_movement_counter/1.
 
 % przeciwnik patrzy w prawo na początku, bo tak xd
 opponent_looks(right).
