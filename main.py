@@ -15,11 +15,14 @@ class StealthGame:
         self.position = 'STAND'
         self.x = 0
         self.y = 0
+        self.opponent_x = 8
+        self.opponent_y = 8
 
         self.size_of_board = 600
-        self.number_of_fields = 20
+        self.number_of_fields = 30
         self.stand_color = '#7BC043'
         self.crawl_color = '#556B2F'
+        self.opponent_color = '#EE4035'
         self.dot_width = 0.25 * self.size_of_board / (self.number_of_fields + 1)
         self.distance_between_dots = self.size_of_board / (self.number_of_fields + 1)
 
@@ -27,6 +30,7 @@ class StealthGame:
         self.create_controls()
         self.create_board()
         self.draw_player()
+        self.draw_opponent()
 
     # ----------------------------
     # GUI
@@ -81,6 +85,15 @@ class StealthGame:
                                                    end_x + self.dot_width / 2, fill=color,
                                                    outline=color, dash=(2, 2))
 
+    def draw_opponent(self):
+        color = self.opponent_color
+        start_x = self.opponent_x * self.distance_between_dots + self.distance_between_dots
+        end_x = (self.number_of_fields - self.opponent_y - 1) * self.distance_between_dots + self.distance_between_dots
+        self.opponent_oval = self.canvas.create_oval(start_x - self.dot_width / 2, end_x - self.dot_width / 2,
+                                                   start_x + self.dot_width / 2,
+                                                   end_x + self.dot_width / 2, fill=color,
+                                                   outline=color, dash=(2, 2))
+
     # ----------------------------
     # Prolog queries
     # ----------------------------
@@ -90,6 +103,12 @@ class StealthGame:
 
     def get_query_for_position(self, position):
         return 'make_' + position.lower()
+
+    def update_opponent_position(self):
+        for position in self.prolog.query('position(opponent, X, Y).'):
+            self.opponent_x = position['X']
+            self.opponent_y = position['Y']
+        self.draw_opponent()
 
     def move(self, direction):
         walk_dir = list(self.prolog.query(self.get_query_for_direction(direction)))
@@ -102,6 +121,11 @@ class StealthGame:
             self.y = position['Y']
             self.canvas.delete(self.player_oval)
             self.draw_player()
+        game_over = list(self.prolog.query('game_over.'))
+        if len(game_over) != 0:
+            print('Loss')
+        self.canvas.delete(self.opponent_oval)
+        self.update_opponent_position()
 
     def change_position(self):
         if self.position == 'CRAWL':
