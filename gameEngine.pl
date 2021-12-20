@@ -11,20 +11,13 @@
 
 %=================== wygrana/przegrana ===============
 
-%# gdy przeciwnik widzi gracza, gracz przegrywa
-loses(player) :- distance(player, opponent, DIST), DIST =< 5, not(crawls(player)).
-loses(player) :- in_opponent_fov(player).
+game_over :- loses(player).
+game_over :- wins(player).
 
-wins(player) :- calm(opponent), distance(player, opponent, DIST), DIST = 1, crawls(player).
+loses(player) :- is_in_the_field_of_view(player, opponent).
+
+wins(player) :- distance(player, opponent, DIST), DIST = 1.
 
 %----------------- pytania ------------------
 %- w Prologu jest domyślnie backward chaining - czyli apka ma działać tak, że odpytujemy z poziomu aplikacji
 %Pythonowej o to, czy po wykonaniu ruchu gracz wygrywa/przegrywa, gdzie przesunąć gracza i przeciwnika? Y
-%- czy da się wywnioskować dwa predykaty, jeśli ich przesłanka złożona z jednego predykatu bedzie prawdziwa?
-%np. # patrzenie w tę samą stronę, w którą odbywają się kroki. ANS: Napisać nowy wniosek, który ma w koniunkcji te dwa
-%chyba wystarczy nie zastosować operatora cięcia? wtedy wszystkie predykaty, które są prawdziwe powinny zostać
-%wyprowadzone? chociaż to jest forward chaining...
-%- czy początkową pozycję gracza i przeciwnika możemy wstawić poprzez wywołanie Prologa z poziomu Pythona?
-%chodzi o to, żeby zapobiec temu, że przy każdym wnioskowaniu będą wstawiane do bazy wiedzy początkowe pozycje gracza i przeciwnika
-%- przeciwnik_patrzy_w_dol :- krok_w_dol # TODO: czy "przeciwnik_patrzy_w_dol" z automatu przestanie być prawdziwe, gdyby "krok_w_dol" usunac z bazy wiedzy???
-%chyba tak, bo w Prologu nie ma lazy evaluation?
